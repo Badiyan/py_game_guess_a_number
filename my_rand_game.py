@@ -28,10 +28,13 @@ def get_name():
 def guess():
 
 def add_result(user_name, result):
+    file = open('results.csv', 'a')
+    file.write('\n'+user_name+' - '+result)
+    file.close()
 
 def show_results():
-
-
+    file = open('results.csv', 'r')
+    print(text2art('Players:\n'),file.read())
 
 def start_game():
     title_art()
