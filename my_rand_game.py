@@ -12,7 +12,7 @@ NEG_STRING = ['ЕХ, жаль',
               'ПРиходи еще',
               'А, ну пока']
 
-attempt = 0
+
 
 def title_art():
     print(text2art(TITLE, font='block', chr_ignore=True))
@@ -26,29 +26,46 @@ def get_name():
         return user_name
 
 def guess():
+    attempt = 0
+    guess = -1
+    secret = random.randint(1, 100)
+    while guess != secret:
+        guess_string = input('Угадай загаданное число: ')
+        try:
+            guess = int(guess_string)
+        except:
+            continue
+        attempt += 1
+        if guess < secret:
+            print('Я загадал число больше, попробуй еще раз.')
+        elif guess > secret:
+            print('Я загадал число меньше, попробуй еще раз.')
+    return attempt
 
 def add_result(user_name, result):
-    file = open('results.csv', 'a')
-    file.write('\n'+user_name+' - '+result)
+    file = open('results.csv', 'a',  encoding='utf-8')
+    file.write('\n'+user_name+' - '+str(result))
     file.close()
 
 def show_results():
-    file = open('results.csv', 'r')
+    file = open('results.csv', 'r',  encoding='utf-8')
     print(text2art('Players:\n'),file.read())
 
 def start_game():
     title_art()
     start_string = random.choice(START_STRINGS)
     neg_string = random.choice(NEG_STRING)
-    if input(start_string, 'да/не') == 'да':
+    if input(start_string+' (да/не) \n') == 'да':
         user_name = get_name()
         result = guess()
-        show_results()
+        print('Поздравляю, ты угадал число за {} попытки(ок)'.format(result))
         add_result(user_name, result)
-    else
+        show_results()
+    else:
         print(neg_string)
-        if input('Показать результаты?', 'да/не') == 'да':
+        if input('Показать результаты?'+' (да/не) \n') == 'да':
             show_results()
-        break
+        else:
+            exit()
 
 start_game()
